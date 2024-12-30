@@ -222,6 +222,11 @@ int32_t TX_freq_check(const uint32_t Frequency)
 				return 0;
 			break;
 
+		case F_LOCK_UHFCB:
+			if (Frequency >= 47642500 && Frequency <= 47741250)
+				return 0;
+			break;
+
 		case F_LOCK_ALL:
 			break;
 
