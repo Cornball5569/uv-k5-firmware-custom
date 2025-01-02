@@ -391,66 +391,77 @@ void RADIO_ConfigureSquelchAndOutputPower(VFO_Info_t *pInfo)
 	// *******************************
 	// squelch
 
-	FREQUENCY_Band_t Band = FREQUENCY_GetBand(pInfo->pRX->Frequency);
-	uint16_t Base = (Band < BAND4_174MHz) ? 0x1E60 : 0x1E00;
+    typedef struct {
+    uint16_t SquelchOpenRSSIThresh;
+    uint16_t SquelchCloseRSSIThresh;
+    uint16_t SquelchOpenNoiseThresh;
+    uint16_t SquelchCloseNoiseThresh;
+    uint16_t SquelchOpenGlitchThresh;
+    uint16_t SquelchCloseGlitchThresh;
+    } SquelchSettings_t;
 
-	if (gEeprom.SQUELCH_LEVEL == 0)
-	{	// squelch == 0 (off)
-		pInfo->SquelchOpenRSSIThresh    = 0;     // 0 ~ 255
-		pInfo->SquelchOpenNoiseThresh   = 127;   // 127 ~ 0
-		pInfo->SquelchCloseGlitchThresh = 255;   // 255 ~ 0
-
-		pInfo->SquelchCloseRSSIThresh   = 0;     // 0 ~ 255
-		pInfo->SquelchCloseNoiseThresh  = 127;   // 127 ~ 0
-		pInfo->SquelchOpenGlitchThresh  = 255;   // 255 ~ 0
-	}
-	else
-	{	// squelch >= 1
-		Base += gEeprom.SQUELCH_LEVEL;                                        // my eeprom squelch-1
-																			  // VHF   UHF
-		EEPROM_ReadBuffer(Base + 0x00, &pInfo->SquelchOpenRSSIThresh,    1);  //  50    10
-		EEPROM_ReadBuffer(Base + 0x10, &pInfo->SquelchCloseRSSIThresh,   1);  //  40     5
-
-		EEPROM_ReadBuffer(Base + 0x20, &pInfo->SquelchOpenNoiseThresh,   1);  //  65    90
-		EEPROM_ReadBuffer(Base + 0x30, &pInfo->SquelchCloseNoiseThresh,  1);  //  70   100
-
-		EEPROM_ReadBuffer(Base + 0x40, &pInfo->SquelchCloseGlitchThresh, 1);  //  90    90
-		EEPROM_ReadBuffer(Base + 0x50, &pInfo->SquelchOpenGlitchThresh,  1);  // 100   100
-
-
-		uint16_t noise_open   = pInfo->SquelchOpenNoiseThresh;
-		uint16_t noise_close  = pInfo->SquelchCloseNoiseThresh;
+    // Define a lookup table for squelch settings, RSSI, noise and glitch levels
+    SquelchSettings_t squelchSettingsTable[] = {
+    {68,  64, 76, 79, 30, 30},  // Squelch Level 1, approx -126dBm
+    {72,  68, 69, 72, 20, 20},  // Squelch Level 2, approx -124dBm
+    {76,  72, 62, 65, 20, 20},  // Squelch Level 3, approx -122dBm and 12dB SINAD
+    {80,  76, 54, 57, 17, 17},  // Squelch Level 4, approx -120dBm
+    {84,  80, 54, 57, 17, 17},  // Squelch Level 5, approx -118dBm
+    {88,  84, 54, 57, 17, 17},  // Squelch Level 6, approx -116dBm
+    {92,  88, 54, 57, 17, 17},  // Squelch Level 7, approx -114dBm
+    {96,  92, 54, 57, 17, 17},  // Squelch Level 8, approx -112dBm
+    {100, 96, 54, 57, 17, 17},  // Squelch Level 9, approx -110dBm
+    };
 
 #if ENABLE_SQUELCH_MORE_SENSITIVE
-		uint16_t rssi_open    = pInfo->SquelchOpenRSSIThresh;
-		uint16_t rssi_close   = pInfo->SquelchCloseRSSIThresh;
-		uint16_t glitch_open  = pInfo->SquelchOpenGlitchThresh;
-		uint16_t glitch_close = pInfo->SquelchCloseGlitchThresh;
-		// make squelch more sensitive
-		// note that 'noise' and 'glitch' values are inverted compared to 'rssi' values
-		rssi_open   = (rssi_open   * 1) / 2;
-		noise_open  = (noise_open  * 2) / 1;
-		glitch_open = (glitch_open * 2) / 1;
+    
+    FREQUENCY_Band_t Band = FREQUENCY_GetBand(pInfo->pRX->Frequency);
+    //uint16_t Base = (Band < BAND4_174MHz) ? 0x1E60 : 0x1E00;
 
-		// ensure the 'close' threshold is lower than the 'open' threshold
-		if (rssi_close == rssi_open && rssi_close >= 2)
-			rssi_close -= 2;
-		if (noise_close == noise_open && noise_close  <= 125)
-			noise_close += 2;
-		if (glitch_close == glitch_open && glitch_close <= 253)
-			glitch_close += 2;
+    if (gEeprom.SQUELCH_LEVEL == 0)
+    {   // squelch == 0 (off)
+        pInfo->SquelchOpenRSSIThresh    = 0;     // 0 ~ 255
+        pInfo->SquelchOpenNoiseThresh   = 127;   // 127 ~ 0
+        pInfo->SquelchCloseGlitchThresh = 255;   // 255 ~ 0
 
-		pInfo->SquelchOpenRSSIThresh    = (rssi_open    > 255) ? 255 : rssi_open;
-		pInfo->SquelchCloseRSSIThresh   = (rssi_close   > 255) ? 255 : rssi_close;
-		pInfo->SquelchOpenGlitchThresh  = (glitch_open  > 255) ? 255 : glitch_open;
-		pInfo->SquelchCloseGlitchThresh = (glitch_close > 255) ? 255 : glitch_close;
+        pInfo->SquelchCloseRSSIThresh   = 0;     // 0 ~ 255
+        pInfo->SquelchCloseNoiseThresh  = 127;   // 127 ~ 0
+        pInfo->SquelchOpenGlitchThresh  = 255;   // 255 ~ 0
+    }
+    else
+    {   // squelch >= 1
+        uint8_t level = gEeprom.SQUELCH_LEVEL - 1; // Adjust for zero-based index
+
+        // Ensure the level is within the bounds of the lookup table
+        if (level < sizeof(squelchSettingsTable) / sizeof(squelchSettingsTable[0]))
+        {
+            SquelchSettings_t settings = squelchSettingsTable[level];
+
+            pInfo->SquelchOpenRSSIThresh    = settings.SquelchOpenRSSIThresh;
+            pInfo->SquelchCloseRSSIThresh   = settings.SquelchCloseRSSIThresh;
+            pInfo->SquelchOpenNoiseThresh    = settings.SquelchOpenNoiseThresh;
+            pInfo->SquelchCloseNoiseThresh   = settings.SquelchCloseNoiseThresh;
+            pInfo->SquelchOpenGlitchThresh   = settings.SquelchOpenGlitchThresh;
+            pInfo->SquelchCloseGlitchThresh  = settings.SquelchCloseGlitchThresh;
+        }
+        else
+        {
+            // Handle error: invalid squelch level
+        }
+    
+    // Cap the thresholds as needed
+    //pInfo->SquelchOpenRSSIThresh    = (pInfo->SquelchOpenRSSIThresh > 255) ? 255 : pInfo->SquelchOpenRSSIThresh;
+    //pInfo->SquelchCloseRSSIThresh   = (pInfo->SquelchCloseRSSIThresh > 255) ? 255 : pInfo->SquelchCloseRSSIThresh;
+    pInfo->SquelchOpenNoiseThresh   = (pInfo->SquelchOpenNoiseThresh > 127) ? 127 : pInfo->SquelchOpenNoiseThresh;
+    pInfo->SquelchCloseNoiseThresh  = (pInfo->SquelchCloseNoiseThresh > 127) ? 127 : pInfo->SquelchCloseNoiseThresh;
+    //pInfo->SquelchOpenGlitchThresh  = (pInfo->SquelchOpenGlitchThresh > 255) ? 255 : pInfo->SquelchOpenGlitchThresh;
+    //pInfo->SquelchCloseGlitchThresh = (pInfo->SquelchCloseGlitchThresh > 255) ? 255 : pInfo->SquelchCLoseGlitchThresh;
+    
+    }
+
 #endif
 
-		pInfo->SquelchOpenNoiseThresh   = (noise_open   > 127) ? 127 : noise_open;
-		pInfo->SquelchCloseNoiseThresh  = (noise_close  > 127) ? 127 : noise_close;
-	}
-
-	// *******************************
+    // *******************************
 	// output power
 
 	Band = FREQUENCY_GetBand(pInfo->pTX->Frequency);
