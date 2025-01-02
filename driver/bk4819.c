@@ -613,49 +613,48 @@ void BK4819_SetFilterBandwidth(const BK4819_FilterBandwidth_t Bandwidth, const b
 	{
 		default:
 		case BK4819_FILTER_BW_WIDE:	// 25kHz
-			val = (4u << 12) |     // *3 RF filter bandwidth
-				  (6u <<  6) |     // *0 AFTxLPF2 filter Band Width
-				  (2u <<  4) |     //  2 BW Mode Selection
+			val = (3u << 12) |     // *3 RF filter bandwidth, 3kHz * 2 * 2 = 12kHz RF BW
+				  (0u <<  6) |     // *0 AFTxLPF2 filter Band Width, 3kHz Tx AF BW
+				  (2u <<  4) |     //  2 BW Mode Selection, 25kHz channel BW flag
 				  (1u <<  3) |     //  1
 				  (0u <<  2);     //  0 Gain after FM Demodulation
 
 			if (weak_no_different) {
 				// make the RX bandwidth the same with weak signals
-				val |= (4u <<  9);     // *0 RF filter bandwidth when signal is weak
+				val |= (3u <<  9);     // *3 RF filter bandwidth when signal is weak, 3kHz * 2 * 2 = 12kHz RF BW
 			} else {
 				/// with weak RX signals the RX bandwidth is reduced
-				val |= (2u <<  9);     // *0 RF filter bandwidth when signal is weak
+				val |= (0u <<  9);     // *0 RF filter bandwidth when signal is weak, 1.7kHz * 2 * 2 = 6.8kHz RF BW
 			}
 
 			break;
 
 		case BK4819_FILTER_BW_NARROW:	// 12.5kHz
-			val = (4u << 12) |     // *4 RF filter bandwidth
-				  (0u <<  6) |     // *1 AFTxLPF2 filter Band Width
-				  (0u <<  4) |     //  0 BW Mode Selection
+			val = (4u << 12) |     // *4 RF filter bandwidth, 3.75kHz * 2 = 7.5kHz RF BW
+				  (1u <<  6) |     // *1 AFTxLPF2 filter Band Width, 2.5kHz Tx AF BW
+				  (0u <<  4) |     //  0 BW Mode Selection, 12.5 kHz channel BW flag
 				  (1u <<  3) |     //  1
 				  (0u <<  2);      //  0 Gain after FM Demodulation
 
 			if (weak_no_different) {
-				val |= (4u <<  9);     // *0 RF filter bandwidth when signal is weak
+				val |= (4u <<  9);     // *4 RF filter bandwidth when signal is weak, 3.75kHz * 2 = 7.5kHz RF BW
 			} else {
-				val |= (2u <<  9);
+				val |= (0u <<  9);     // *0 RF filter bandwidth when signal is weak, 1.7kHz * 2 = 3.4kHz RF BW
 			}
 
 			break;
 
 		case BK4819_FILTER_BW_NARROWER:	// 6.25kHz
-			val = (3u << 12) |     //  3 RF filter bandwidth
-				  (3u <<  9) |     // *0 RF filter bandwidth when signal is weak
-				  (1u <<  6) |     //  1 AFTxLPF2 filter Band Width
-				  (1u <<  4) |     //  1 BW Mode Selection
+			val = (3u << 12) |     //  3 RF filter bandwidth, 3kHz * 2 = 6kHz RF BW
+				  (1u <<  6) |     //  1 AFTxLPF2 filter Band Width, 2.5kHz Tx AF BW
+				  (1u <<  4) |     //  1 BW Mode Selection, 6.25kHz channel BW flag
 				  (1u <<  3) |     //  1
 				  (0u <<  2);      //  0 Gain after FM Demodulation
 
 			if (weak_no_different) {
-				val |= (3u <<  9);
+				val |= (3u <<  9);     // *3 RF filter bandwidth when signal is weak, 3kHz * 2 = 6kHz RF BW
 			} else {
-				val |= (0u <<  9);     //  0 RF filter bandwidth when signal is weak
+				val |= (0u <<  9);     // *0 RF filter bandwidth when signal is weak, 1.7kHz * 2 = 3.4kHz RF BW
 			}
 			break;
 	}
