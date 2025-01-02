@@ -700,6 +700,13 @@ void BK4819_SetupSquelch(
 		uint8_t SquelchCloseGlitchThresh,
 		uint8_t SquelchOpenGlitchThresh)
 {
+	// squelch mode - DO NOT USE THESE, THEY MESS UP THE SQUELCH :(
+	//	BK4819_WriteRegister(BK4819_REG_77, 0x88EF);     // rssi + noise + glitch .. RT-890
+	//	BK4819_WriteRegister(BK4819_REG_77, 0xA8EF);     // rssi + noise + glitch .. default
+	//	BK4819_WriteRegister(BK4819_REG_77, 0xAAEF);     // rssi + glitch
+	BK4819_WriteRegister(BK4819_REG_77, 0xCCEF);     // rssi + noise
+	//	BK4819_WriteRegister(BK4819_REG_77, 0xFFEF);     // rssi
+	
 	// REG_70
 	//
 	// <15>   0 Enable TONE1
