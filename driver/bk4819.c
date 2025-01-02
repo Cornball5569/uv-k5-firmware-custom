@@ -122,6 +122,15 @@ void BK4819_Init(void)
 
 	BK4819_WriteRegister(BK4819_REG_33, 0x9000);
 	BK4819_WriteRegister(BK4819_REG_3F, 0);
+
+	BK4819_WriteRegister(BK4819_REG_2B, 0xC000);
+	BK4819_WriteRegister(BK4819_REG_44, 0x9009);
+	BK4819_WriteRegister(BK4819_REG_45, 0x31A9);
+	BK4819_WriteRegister(BK4819_REG_54, 0x9009);
+	BK4819_WriteRegister(BK4819_REG_55, 0x31A9);
+	BK4819_WriteRegister(BK4819_REG_74, 0xF50B);
+	BK4819_WriteRegister(BK4819_REG_74, 0xF50B);
+	
 }
 
 static uint16_t BK4819_ReadU16(void)
@@ -706,7 +715,7 @@ void BK4819_SetupSquelch(
 	//	BK4819_WriteRegister(BK4819_REG_77, 0xAAEF);     // rssi + glitch
 	BK4819_WriteRegister(BK4819_REG_77, 0xCCEF);     // rssi + noise
 	//	BK4819_WriteRegister(BK4819_REG_77, 0xFFEF);     // rssi
-	
+
 	// REG_70
 	//
 	// <15>   0 Enable TONE1
