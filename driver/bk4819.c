@@ -613,18 +613,18 @@ void BK4819_SetFilterBandwidth(const BK4819_FilterBandwidth_t Bandwidth, const b
 	{
 		default:
 		case BK4819_FILTER_BW_WIDE:	// 25kHz
-			val = (4u << 12) |     // *3 RF filter bandwidth
-				  (6u <<  6) |     // *0 AFTxLPF2 filter Band Width
+			val = (3u << 12) |     // *3 RF filter bandwidth
+				  (0u <<  6) |     // *0 AFTxLPF2 filter Band Width
 				  (2u <<  4) |     //  2 BW Mode Selection
 				  (1u <<  3) |     //  1
 				  (0u <<  2);     //  0 Gain after FM Demodulation
 
 			if (weak_no_different) {
 				// make the RX bandwidth the same with weak signals
-				val |= (4u <<  9);     // *0 RF filter bandwidth when signal is weak
+				val |= (3u <<  9);     // *0 RF filter bandwidth when signal is weak
 			} else {
 				/// with weak RX signals the RX bandwidth is reduced
-				val |= (2u <<  9);     // *0 RF filter bandwidth when signal is weak
+				val |= (0u <<  9);     // *0 RF filter bandwidth when signal is weak
 			}
 
 			break;
@@ -639,14 +639,13 @@ void BK4819_SetFilterBandwidth(const BK4819_FilterBandwidth_t Bandwidth, const b
 			if (weak_no_different) {
 				val |= (4u <<  9);     // *0 RF filter bandwidth when signal is weak
 			} else {
-				val |= (2u <<  9);
+				val |= (0u <<  9);
 			}
 
 			break;
 
 		case BK4819_FILTER_BW_NARROWER:	// 6.25kHz
 			val = (3u << 12) |     //  3 RF filter bandwidth
-				  (3u <<  9) |     // *0 RF filter bandwidth when signal is weak
 				  (1u <<  6) |     //  1 AFTxLPF2 filter Band Width
 				  (1u <<  4) |     //  1 BW Mode Selection
 				  (1u <<  3) |     //  1
