@@ -437,7 +437,7 @@ void UI_DisplayMain(void)
 			const unsigned int x = 2;
 			const bool inputting = gInputBoxIndex != 0 && gEeprom.TX_VFO == vfo_num;
 			if (!inputting)
-				sprintf(String, "M%u", gEeprom.ScreenChannel[vfo_num] + 1);
+				sprintf(String, "M%03u", gEeprom.ScreenChannel[vfo_num] + 1);
 			else
 				sprintf(String, "M%.3s", INPUTBOX_GetAscii());  // show the input text
 			UI_PrintStringSmallNormal(String, x, 0, line + 1);
