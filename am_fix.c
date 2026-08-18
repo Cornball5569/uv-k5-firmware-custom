@@ -139,7 +139,7 @@ static const t_gain_table gain_table[] =
 	{0x035F,-14},   // 36 .. 3 2 3 7 ..   0dB -14dB  0dB   0dB .. -14dB
 	{0x037E,-12},   // 37 .. 3 3 3 6 ..   0dB  -9dB  0dB  -3dB .. -12dB
 	{0x037F,-9},    // 38 .. 3 3 3 7 ..   0dB  -9dB  0dB   0dB ..  -9dB
-	{0x038F,-6},    // 39 .. 3 4 3 7 ..   0dB - 6dB  0dB   0dB ..  -6dB
+	{0x039F,-6},    // 39 .. 3 4 3 7 ..   0dB - 6dB  0dB   0dB ..  -6dB 0x038F was incorrect providing -12dB
 	{0x03BF,-4},    // 40 .. 3 5 3 7 ..   0dB  -4dB  0dB   0dB ..  -4dB
 	{0x03DF,-2},    // 41 .. 3 6 3 7 ..   0dB - 2dB  0dB   0dB ..  -2dB
 	{0x03FF,0}      // 42 .. 3 7 3 7 ..   0dB   0dB  0dB   0dB ..   0dB
