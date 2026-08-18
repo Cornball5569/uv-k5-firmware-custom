@@ -210,10 +210,10 @@ void DisplayRSSIBar(const bool now)
 	uint8_t overS9Bars = MIN(overS9dBm/10, 4);
 
 	if(overS9Bars == 0) {
-		sprintf(str, "% 4d S%d", rssi_dBm, s_level);
+		sprintf(str, "% 4d dBm", rssi_dBm);
 	}
 	else {
-		sprintf(str, "% 4d  %2d", rssi_dBm, overS9dBm);
+		sprintf(str, "% 4d dBm", rssi_dBm);
 		memcpy(p_line + 2 + 7*5, &plus, ARRAY_SIZE(plus));
 	}
 
