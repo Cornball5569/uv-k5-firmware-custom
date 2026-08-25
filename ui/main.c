@@ -77,11 +77,18 @@ static void DrawSmallAntennaAndBars(uint8_t *p, unsigned int level)
 
 static void DrawLevelBar(uint8_t xpos, uint8_t line, uint8_t level)
 {
+	const char solidBar[] = {
+		0b00111110,
+		0b00100010,
+		0b00100010,
+		0b00111110
+	};
+	
 	const char hollowBar[] = {
-		0b01111111,
-		0b01000001,
-		0b01000001,
-		0b01111111
+		0b00111110,
+		0b00111110,
+		0b00111110,
+		0b00111110
 	};
 
 	uint8_t *p_line = gFrameBuffer[line];
@@ -89,8 +96,7 @@ static void DrawLevelBar(uint8_t xpos, uint8_t line, uint8_t level)
 
 	for(uint8_t i = 0; i < level; i++) {
 		if(i < 9) {
-			for(uint8_t j = 0; j < 4; j++)
-				p_line[xpos + i * 5 + j] = (~(0x7F >> (i+1))) & 0x7F;
+			memcpy(p_line + (xpos + i * 5), &solidBar, ARRAY_SIZE(solidBar));
 		}
 		else {
 			memcpy(p_line + (xpos + i * 5), &hollowBar, ARRAY_SIZE(hollowBar));
