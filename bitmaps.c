@@ -18,7 +18,7 @@ const uint8_t BITMAP_POWERSAVE[8] =
 
 };
 
-const uint8_t BITMAP_TX[8] =
+/*const uint8_t BITMAP_TX[8] =
 {	// "TX" HD44780 upward arrow
 	0b00000000,
 	0b00000100,
@@ -40,7 +40,7 @@ const uint8_t BITMAP_RX[8] =
 	0b00010000,
 	0b00000000,
 	0b00000000
-};
+}; */
 
 const uint8_t BITMAP_FM[10] =
 {	// "FM" HD44780 musical note symbol
