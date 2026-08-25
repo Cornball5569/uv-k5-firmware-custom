@@ -6,20 +6,20 @@
 
 const uint8_t BITMAP_POWERSAVE[8] =
 {
-	// "PS" HD44780 '$' symbol
+	// "PS" HD44780U A02 'heart' symbol
 	0b00000000,
-	0b00100100,
-	0b00101010,
-	0b01111111,
-	0b00101010,
-	0b00010010,
-	0b00000000,
+	0b0000000,
+	0b00011100,
+	0b00111110,
+	0b01111100,
+	0b00111110,
+	0b00011100,
 	0b00000000
 
 };
 
 /*const uint8_t BITMAP_TX[8] =
-{	// "TX" HD44780 upward arrow
+{	// "TX" HD44780U A02upward arrow
 	0b00000000,
 	0b00000100,
 	0b00000010,
@@ -31,7 +31,7 @@ const uint8_t BITMAP_POWERSAVE[8] =
 };
 
 const uint8_t BITMAP_RX[8] =
-{	// "RX" HD44780 downward arrow
+{	// "RX" HD44780U A02 downward arrow
 	0b00000000,
 	0b00010000,
 	0b00100000,
@@ -43,7 +43,7 @@ const uint8_t BITMAP_RX[8] =
 }; */
 
 const uint8_t BITMAP_FM[10] =
-{	// "FM" HD44780 musical note symbol
+{	// "FM" HD44780U A02 musical note symbol
 	0b00000000,
 	0b00000000,
 	0b01100000,
@@ -132,7 +132,7 @@ const uint8_t BITMAP_KeyLock[6] =
 };
 
 const uint8_t BITMAP_F_Key[6] =
-{	// F-Key symbol HD44780 letter "F"
+{	// F-Key symbol HD44780U A02 letter "F"
 	0b00000000,
 	0b01111111,
 	0b00001001,
@@ -185,7 +185,7 @@ const uint8_t BITMAP_XB[12] =
 
 
 const uint8_t BITMAP_TDR1[16] =
-{	// "DWR" HD44780 letters "D" and "W"
+{	// "DWR" HD44780U A02 letters "D" and "W"
 	0b00000000,
 	0b01111111,
 	0b01000001,
@@ -205,7 +205,7 @@ const uint8_t BITMAP_TDR1[16] =
 };
 
 const uint8_t BITMAP_TDR2[10] =
-{	// "><" .. DW on hold HD44780 ">" and "<" symbols
+{	// "><" .. DW on hold HD44780U A02 ">" and "<" symbols
 	0b00000000,
 	0b01000001,
 	0b00100010,
@@ -260,7 +260,7 @@ const uint8_t BITMAP_Antenna[5] =
 };
 
 const uint8_t BITMAP_VFO_Default[8] =
-{   // HD44780 solid ">" symbol
+{   // HD44780U A02 solid ">" symbol
 	0b00000000,
 	0b00000000,
 	0b00000000,
@@ -272,7 +272,7 @@ const uint8_t BITMAP_VFO_Default[8] =
 };
 
 const uint8_t BITMAP_VFO_NotDefault[8] =
-{   // HD44780 ">" symbol
+{   // HD44780U A02 ">" symbol
 	0b00000000,
 	0b00000000,
 	0b00000000,
@@ -284,7 +284,7 @@ const uint8_t BITMAP_VFO_NotDefault[8] =
 };
 
 const uint8_t BITMAP_ScanList1[6] =
-{	// 'I' symbol HD44780 superscript "1"
+{	// 'I' symbol HD44780U A02 superscript "1"
 	0b00000000,
 	0b00000000,
 	0b00100100,
@@ -294,7 +294,7 @@ const uint8_t BITMAP_ScanList1[6] =
 };
 
 const uint8_t BITMAP_ScanList2[6] =
-{	// 'II' symbol HD44780 superscript "2"
+{	// 'II' symbol HD44780U A02 superscript "2"
 	0b00000000,
 	0b00100100,
 	0b00110010,
@@ -304,7 +304,7 @@ const uint8_t BITMAP_ScanList2[6] =
 };
 
 const uint8_t BITMAP_compand[6] =
-{
+{	// HD44780U A02 letter 'C'
 	0b00000000,
 	0b00111100,
 	0b01000010,
